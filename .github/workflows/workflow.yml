@@ -25,7 +25,7 @@ jobs:
       - uses: Swatinem/rust-cache@v2
       - uses: taiki-e/install-action@v2
         with:
-          tool: cargo-upgrade,cargo-msrv
+          tool: cargo-edit,cargo-msrv
 
       - run: |
           cat Cargo.toml | sed 's/rust-version.*//g' > Cargo2.toml
