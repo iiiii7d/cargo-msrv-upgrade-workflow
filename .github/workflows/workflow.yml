@@ -10,6 +10,9 @@ on:
       upgrade-branch-name:
         type: string
         default: cargo-upgrade
+      run-cargo-msrv:
+        type: boolean
+        default: true
 
 jobs:
   cargo-msrv-upgrade:
@@ -38,6 +41,7 @@ jobs:
 
       - run: cargo msrv find --ignore-lockfile --write-msrv
         continue-on-error: true
+        if: ${{ inputs.run-cargo-msrv }}
       
       - run: echo "message=upgrade rust dependencies @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
       - uses: peter-evans/create-pull-request@v7
