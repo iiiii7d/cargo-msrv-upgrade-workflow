@@ -4,10 +4,10 @@ on:
       checkout_ref:
         type: string
         default: ""
-      upgrade_branch_title:
+      upgrade-branch-title:
         type: string
         default: upgrade rust dependencies
-      upgrade_branch_name:
+      upgrade-branch-name:
         type: string
         default: cargo-upgrade
 
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ inputs.checkout_ref }}
+          ref: ${{ inputs.checkout-ref }}
           
       - uses: actions/cache@v4
         with:
@@ -50,5 +50,5 @@ jobs:
       - uses: peter-evans/create-pull-request@v7
         with:
           commit-message: ${{ env.message }}
-          title: ${{ inputs.upgrade_branch_title }}
-          branch: ${{ inputs.upgrade_branch_name }}
+          title: ${{ inputs.upgrade-branch-title }}
+          branch: ${{ inputs.upgrade-branch-name }}
