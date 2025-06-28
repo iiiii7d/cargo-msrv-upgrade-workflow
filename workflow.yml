@@ -1,0 +1,54 @@
+on:
+  workflow_call:
+    inputs:
+      checkout_ref:
+        type: string
+        default: ""
+      upgrade_branch_title:
+        type: string
+        default: upgrade rust dependencies
+      upgrade_branch_name:
+        type: string
+        default: cargo-upgrade
+
+jobs:
+  cargo-msrv-upgrade:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.checkout_ref }}
+          
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo
+      - uses:  actions-rs/toolchain@v1
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-upgrade,cargo-msrv
+
+      - run: |
+          cat Cargo.toml | sed 's/rust-version.*//g' > Cargo2.toml
+          mv Cargo2.toml Cargo.toml
+          
+      - run: cargo upgrade -i --recursive true
+        continue-on-error: true
+      - run: cargo update
+        continue-on-error: true
+
+      - run: cargo msrv find --ignore-lockfile --write-msrv
+        continue-on-error: true
+      
+      - run: echo "message=upgrade rust dependencies @ $(date +%Y%m%dT%H:%M:%S%Z)" >> "$GITHUB_ENV"
+      - uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: ${{ env.message }}
+          title: ${{ inputs.upgrade_branch_title }}
+          branch: ${{ inputs.upgrade_branch_name }}
