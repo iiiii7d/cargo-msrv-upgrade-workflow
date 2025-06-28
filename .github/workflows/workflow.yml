@@ -1,7 +1,7 @@
 on:
   workflow_call:
     inputs:
-      checkout_ref:
+      checkout-ref:
         type: string
         default: ""
       upgrade-branch-title:
