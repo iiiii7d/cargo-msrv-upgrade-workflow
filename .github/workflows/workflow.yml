@@ -13,6 +13,9 @@ on:
       run-cargo-msrv:
         type: boolean
         default: true
+      working-directory:
+        type: string
+        default: ""
 
 jobs:
   cargo-msrv-upgrade:
@@ -20,6 +23,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
     steps:
       - uses: actions/checkout@v4
         with:
