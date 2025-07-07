@@ -15,7 +15,7 @@ on:
         default: true
       working-directory:
         type: string
-        default: ""
+        default: "."
 
 jobs:
   cargo-msrv-upgrade:
