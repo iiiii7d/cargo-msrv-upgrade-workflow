@@ -37,7 +37,7 @@ jobs:
           tool: cargo-edit,cargo-msrv
 
       - run: |
-          cat Cargo.toml | sed 's/rust-version.*//g' > Cargo2.toml
+          cat Cargo.toml | sed -z 's/rust-version.*//mg' > Cargo2.toml
           mv Cargo2.toml Cargo.toml
           
       - run: cargo upgrade -i --recursive true
